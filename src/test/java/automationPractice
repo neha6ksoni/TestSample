@@ -1,1 +1,207 @@
 
+package day2;
+
+import static org.junit.Assert.*;
+
+import java.util.Iterator;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriver.Window;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
+
+
+
+public class automationPractice {
+
+		WebDriver driver;
+		WebElement element;
+		
+		@Before
+		public void setUp() throws Exception {
+			
+			
+
+			System.setProperty("webdriver.chrome.driver","src\\main\\resources\\drivers\\chromedriver.exe");
+			driver = new ChromeDriver();
+	
+			
+			driver.manage().window().maximize();
+			driver.manage().deleteAllCookies();
+			driver.manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
+			driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+			
+		}
+
+		@After
+		public void tearDown() throws Exception {
+		
+		     driver.quit();
+		
+		}
+		
+
+		@Test
+		
+		
+		public void signInWithCredentials() throws InterruptedException {
+			
+			String url = "http://automationpractice.com/index.php";
+			driver.get(url);
+			String pageTitle = driver.getTitle();
+			String username = "test01app123@gmail.com";
+			String password = "test@123";
+			String firstName="Tony";
+			String lastName="Dhale";
+			System.out.println("The Title of the Page is :: "+ pageTitle);
+			        
+			        element = driver.findElement(By.xpath("//*[@id=\"header\"]/div[2]/div/div/nav/div[1]/a"));
+					element.click();
+					
+				//#Locating element using id and new user account creation
+					
+					 element = driver.findElement(By.id("email_create"));
+					 element.sendKeys(username);
+					 driver.findElement(By.xpath("//*[@id='SubmitCreate']")).click();
+					
+					 WebElement radio1 = driver.findElement(By.id("uniform-id_gender1"));							
+				     WebElement radio2 = driver.findElement(By.id("uniform-id_gender2"));
+			         radio1.click();
+				     
+				     element=driver.findElement(By.id("customer_firstname"));
+				     element.sendKeys(firstName);
+				     
+				     element=driver.findElement(By.id("customer_lastname"));
+				     element.sendKeys(lastName);
+				     
+				     //Scroll window if needed 
+				     
+				     JavascriptExecutor jse = (JavascriptExecutor)driver;
+				     jse.executeScript("window.scrollBy(0,400)");
+				     
+				     element=driver.findElement(By.id("passwd"));
+				     element.sendKeys(password);
+				     
+				     int expLength = 6;
+					 element=driver.findElement(By.xpath("//*[@id=\"passwd\"]"));
+					 element.sendKeys(password);
+					 
+					 /*String passText=driver.findElement(By.xpath("//*[@id=\"passwd\"]")).getText();
+					 int passLength= passText.length();
+					 System.out.println("length" +passLength);
+					 if(passLength < expLength) { 
+						 Assert.assertEquals(passLength, expLength, "Password length should be minimum five characters.");
+						    System.out.println("It contains "+passLength+" characters.");
+					 }*/
+
+				     
+					 Select dropdown = new Select(driver.findElement(By.id("days")));
+					 dropdown.selectByIndex(2);
+					 Select dropdown1 = new Select(driver.findElement(By.id("months")));
+					 dropdown1.selectByIndex(2);
+					 
+					 Select dropdown2 = new Select(driver.findElement(By.id("years")));
+					 dropdown2.selectByIndex(2);
+					 
+					 element=driver.findElement(By.id("company"));
+					 element.sendKeys("Test22");
+					 
+					 element=driver.findElement(By.id("address1"));
+					 element.sendKeys("Bristol City Center");
+					 
+					 element=driver.findElement(By.id("postcode"));
+					 element.sendKeys("00000");
+					 
+					
+					 element=driver.findElement(By.id("city"));
+					 element.sendKeys("Bristol");
+					 
+					 Select dropdown3 = new Select(driver.findElement(By.id("id_state")));
+					 dropdown3.selectByIndex(3);
+					 
+					 element=driver.findElement(By.id("other"));
+					 element.sendKeys("Testing application");
+					 
+					 element=driver.findElement(By.id("phone_mobile"));
+					 element.sendKeys("0123456789");
+					 
+					 element=driver.findElement(By.id("alias"));
+					 element.sendKeys("Bristol City");
+					 
+					 driver.findElement(By.xpath("//*[@id='submitAccount']")).click();
+					 
+					 
+					 driver.findElement(By.xpath("//*[@id=\"header\"]/div[2]/div/div/nav/div[2]/a")).click();
+					 
+					 // Validation created user account
+					 
+					 driver.findElement(By.xpath("//*[@id=\"header\"]/div[2]/div/div/nav/div[1]/a")).click();
+					 
+					 element=driver.findElement(By.id("email"));
+				     element.sendKeys(username);
+				     
+				     element=driver.findElement(By.id("passwd"));
+				     element.sendKeys(password);
+					 
+				     driver.findElement(By.xpath("//*[@id=\"SubmitLogin\"]")).click();
+					 
+					 
+					// Select the item from collection 
+					 
+				     driver.findElement(By.xpath("//*[@id='block_top_menu']/ul/li[3]")).click();
+				     
+                     String originalText=driver.findElement(By.xpath("//*[@id=\"center_column\"]/ul/li/div/div[2]/h5/a")).getText();
+					 
+					 System.out.println("Tshirt Name  "+originalText);
+		   
+					 driver.findElement(By.xpath("//*[@id='center_column']/ul/li/div/div[1]/div/a[1]/img")).click();
+					 
+					
+	
+					//Add the selected Item into cart 
+					 
+					 driver.switchTo().frame(0);
+				
+				
+					Thread.sleep(2000L);
+			        driver.findElement(By.xpath(".//*[@id='add_to_cart']/button")).click();
+			        Thread.sleep(2000L);
+			        
+			        driver.findElement(By.xpath(".//*[@id='layer_cart']/div[1]/div[2]/div[4]/a/span")).click();
+			        Thread.sleep(2000L);
+			        
+			        // Verify the item added in cart is same as selected
+			        jse.executeScript("window.scrollBy(0,250)");
+			        
+			        String exptedTName= driver.findElement(By.xpath("//*[@id=\"product_1_1_0_367058\"]/td[2]/p/a")).getText();
+			        System.out.println("Added Cart Item description " + exptedTName);
+			        if(originalText.equals(exptedTName))
+			        		{
+
+			        	System.out.println("Iteam Added in cart is same as selected");
+
+			        	}else{
+
+			        	System.out.println("Iteam Added in cart is not same as selected");
+
+			        	}
+  		
+			    	
+					
+		}
+}
+					
